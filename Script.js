@@ -39,8 +39,9 @@ function fetchStock(symbol) {
                stockYValues.push(data['Time Series (5min)'][key]['4. close']);
              }
 
-             // had to move the price updater into here because the value couldn't be retrieved form other scopes
+             // had to move the price updater into here because the value couldn't be retrieved from other scopes
              document.getElementById("stockPrice").innerHTML = "$" + stockYValues[0];
+             document.getElementById("stockTime").innerHTML = "" + stockXValues[0];
 
    
          }
