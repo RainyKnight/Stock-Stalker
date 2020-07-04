@@ -1,6 +1,55 @@
+var stockXValues = [];
+var stockYValues = [];
+
+
+
 function runCode() {
-    alert("Hello World!");
+   stonks();
 }
+
+function stonks() {
+   var tickerSymbolVal = (document.getElementById("formTickerSymbol").value).toUpperCase(); //get user input
+   fetchStock(tickerSymbolVal);
+   console.log(stockXValues);
+   console.log(stockYValues);
+   console.log(stockYValues[0]);
+   
+
+
+   // update the stock name with user input
+   document.getElementById("tickerSymbol").innerHTML = tickerSymbolVal;
+}
+
+function fetchStock(symbol) {
+   const API_KEY = "SYYW3CEFTKIL6G9Q";
+   let API_CALL = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol + "&interval=5min&apikey=" + API_KEY;
+
+   fetch(API_CALL)
+      .then(
+         function (response) {
+            return response.json();
+         }
+      )
+      .then(
+         function(data){
+            console.log(data);
+
+            for (var key in data['Time Series (5min)']) {
+               stockXValues.push(key);
+               stockYValues.push(data['Time Series (5min)'][key]['4. close']);
+             }
+
+             // had to move the price updater into here because the value couldn't be retrieved form other scopes
+             document.getElementById("stockPrice").innerHTML = "$" + stockYValues[0];
+
+   
+         }
+      )
+}
+
+
+
+
 
 /*
 PSEUDOCODE PLANNING
@@ -18,7 +67,7 @@ Features wanted:
     - (future implementation) Stock had a LARGE spike/dip and is giving outlier numbers for range.
 
  + Track general highs and lows to generate statistics.
- + For now, just monitor stocks and pretend buy/sell. 
+ + For now, just monitor stocks and pretend buy/sell.
  - (future implementation) Will implement actual buying and selling through API later.
 
  NOTE: This only profits off stock fluctuations, not general trend. If a stock soars and jumps 50% in a day,
