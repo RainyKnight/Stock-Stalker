@@ -14,15 +14,26 @@
 </head>
 
 <body>
+  <h1><u>Stock Stalker</u></h1>
   <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
-      <h1><u>Stock Stalker</u></h1>
 
-      <!-- To be changed by JS. -->
+      <!-- To be changed by JS -->
       <h2 id="tickerSymbol"></h2>
-      <h3 id="stockPrice"></h3>
+
+      <div id="stockPrice">
+        <!-- Moving the stock price to show comparison visually -->
+        <h3 id="stockPriceAbove"></h3>
+        <h3 id="stockAverage"></h3>
+        <h3 id="stockPriceBelow"></h3>
+      </div>
+
+      <!-- Stock Recommendation -->
+      <!-- <h3 id="stockRecommendation"></h3> -->
       <p id="stockTime"></p>
+
+
 
 
 
@@ -31,12 +42,28 @@
           <label></label>
           <input type="search" class="form-control" id="formTickerSymbol" placeholder="Ex: AMZN" required>
         </div>
-        <button type="button" class="btn btn-primary" is="myBtn" onclick="runCode()">Get Stonks</button>
+        <button type="button" class="btn btn-primary" is="myBtn" onclick="runCode()">Analyze</button>
       </form>
 
     </div>
     <div class="col-sm-4"></div>
   </div>
+
+  <footer class="footer">
+    <div class="container">
+      <hr>
+      <p id="disclaimer"><br><br>Disclaimer:<br>Price calculated using <a href="https://www.alphavantage.co/">Alpha
+          Vantage API</a> and 100 data points of close data gathered every five minutes. Does not account for after-hours price fluctuation until the next trading day.<br> This tool is only recommended to be used for swing trading.</p>
+
+      <br>
+      Copyright © Lucas Stoltman
+      <script type="text/javascript">
+        document.write(new Date().getFullYear());
+      </script>
+      </p>
+    </div>
+  </footer>
+
 
 
 

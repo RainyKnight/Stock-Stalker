@@ -1,20 +1,21 @@
+var tickerSymbolVal;
 var stockXValues = [];
 var stockYValues = [];
+var stockTotal = 0;
+var stockAverage = 0;
+var currentPrice;
+var potentialProfit;
+
 
 
 
 function runCode() {
-   stonks();
+   stock();
 }
 
-function stonks() {
-   var tickerSymbolVal = (document.getElementById("formTickerSymbol").value).toUpperCase(); //get user input
+function stock() {
+   tickerSymbolVal = (document.getElementById("formTickerSymbol").value); //get user input
    fetchStock(tickerSymbolVal);
-   console.log(stockXValues);
-   console.log(stockYValues);
-   console.log(stockYValues[0]);
-   
-
 
    // update the stock name with user input
    document.getElementById("tickerSymbol").innerHTML = tickerSymbolVal;
@@ -24,6 +25,7 @@ function fetchStock(symbol) {
    const API_KEY = "SYYW3CEFTKIL6G9Q";
    let API_CALL = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol + "&interval=5min&apikey=" + API_KEY;
 
+
    fetch(API_CALL)
       .then(
          function (response) {
@@ -31,26 +33,49 @@ function fetchStock(symbol) {
          }
       )
       .then(
-         function(data){
+         function (data) {
             console.log(data);
 
             for (var key in data['Time Series (5min)']) {
                stockXValues.push(key);
                stockYValues.push(data['Time Series (5min)'][key]['4. close']);
-             }
+            }
 
-             // had to move the price updater into here because the value couldn't be retrieved from other scopes
-             document.getElementById("stockPrice").innerHTML = "$" + stockYValues[0];
-             document.getElementById("stockTime").innerHTML = "" + stockXValues[0];
+            currentPrice = stockYValues[0];
+            // average stock price and record whether or not to buy stock 
+            for (let i = 0; i < stockYValues.length; i++) {
+               stockTotal += parseInt(stockYValues[i]);
+            }
 
-   
+            // calculate average price per share
+            stockAverage = stockTotal / 100;
+
+            console.log("Last close price: $" + currentPrice);
+            console.log("Average: $" + stockAverage);
+
+            if (currentPrice < stockAverage) {
+               potentialProfit = currentPrice / stockAverage;
+               document.getElementById("stockPriceBelow").innerHTML = "Current: $" + currentPrice;
+               document.getElementById("stockPriceBelow").style.color = "red";
+               console.log("BUY for " + potentialProfit + "% potential profit");
+            }
+            else if (currentPrice > stockAverage) {
+               potentialProfit = stockAverage / currentPrice;
+               document.getElementById("stockPriceAbove").innerHTML = "Current: $" + currentPrice;
+               document.getElementById("stockPriceAbove").style.color = "green";
+               console.log("SELL for " + potentialProfit + "% potential profit");
+            }
+            else {
+               console.log("HOLD!");
+            }
+
+            // had to move the price updater into here because the value couldn't be retrieved from other scopes
+            document.getElementById("stockTime").innerHTML = "" + stockXValues[0];
+            document.getElementById("stockAverage").innerHTML = "Average: $" + stockAverage;
+
          }
       )
 }
-
-
-
-
 
 /*
 PSEUDOCODE PLANNING
