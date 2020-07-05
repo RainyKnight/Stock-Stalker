@@ -21,20 +21,17 @@
 
       <!-- To be changed by JS -->
       <h2 id="tickerSymbol"></h2>
+      <p id="stockTime"></p>
 
       <div id="stockPrice">
-        <!-- Moving the stock price to show comparison visually -->
+        <!-- Moving the stock price to show comparison to average visually -->
         <h3 id="stockPriceAbove"></h3>
         <h3 id="stockAverage"></h3>
         <h3 id="stockPriceBelow"></h3>
       </div>
 
       <!-- Stock Recommendation -->
-      <!-- <h3 id="stockRecommendation"></h3> -->
-      <p id="stockTime"></p>
-
-
-
+      <p id="stockRecommendation"></p>
 
 
       <form id="yourForm">
@@ -52,9 +49,10 @@
   <footer class="footer">
     <div class="container">
       <hr>
-      <p id="disclaimer"><br><br>Disclaimer:<br>Price calculated using <a href="https://www.alphavantage.co/">Alpha
-          Vantage API</a> and 100 data points of close data gathered every five minutes. Does not account for after-hours price fluctuation until the next trading day.<br> This tool is only recommended to be used for swing trading.</p>
-
+      <p id="disclaimer">Disclaimer:<br>Price calculated using <a href="https://www.alphavantage.co/">Alpha
+          Vantage API</a> and 100 data points of close-price data gathered every sixty minutes for the past week. <br>Does not account for
+        after-hours price fluctuation until the next trading day.<br> This tool is only recommended to be used for swing
+        trading.</p>
       <br>
       Copyright © Lucas Stoltman
       <script type="text/javascript">
@@ -63,11 +61,6 @@
       </p>
     </div>
   </footer>
-
-
-
-
-
 
   <!-- Putting the external src in the body so the contents load before the js is good practice -->
   <link rel="stylesheet" type="text/css" href="style.css">

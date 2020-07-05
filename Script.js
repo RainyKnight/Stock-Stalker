@@ -1,31 +1,36 @@
-var tickerSymbolVal;
-var stockXValues = [];
-var stockYValues = [];
-var stockTotal = 0;
-var stockAverage = 0;
-var currentPrice;
-var potentialProfit;
+// List of implementations to work on:
 
+// TODO error handle searching for a ticker symbol that doesn't exist
+// TODO enter key integration so the user doesn't need to press the "Analyze" button each time
 
-
-
+// Now back to the code!
+// --------------------------------------------------------------------------------------------------------
 function runCode() {
-   stock();
-}
+   // clear previous prices
+   document.getElementById("stockPriceBelow").innerHTML = "";
+   document.getElementById("stockPriceAbove").innerHTML = "";
+   document.getElementById("stockAverage").innerHTML = "";
+   document.getElementById("stockRecommendation").innerHTML = "";
 
-function stock() {
    tickerSymbolVal = (document.getElementById("formTickerSymbol").value); //get user input
-   fetchStock(tickerSymbolVal);
 
-   // update the stock name with user input
-   document.getElementById("tickerSymbol").innerHTML = tickerSymbolVal;
+   fetchStock(tickerSymbolVal);
 }
 
 function fetchStock(symbol) {
+   var stockXValues = [];
+   var stockYValues = [];
+   var stockTotal = 0;
+   var stockAverage = 0;
+   var currentPrice;
+   var potentialProfit;
+
+   // Alpha Vantage API
    const API_KEY = "SYYW3CEFTKIL6G9Q";
-   let API_CALL = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol + "&interval=5min&apikey=" + API_KEY;
+   let API_CALL = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + symbol + "&interval=60min&apikey=" + API_KEY;
 
-
+   // API utilization inspired by this video:
+   // https://www.youtube.com/watch?v=T26V1aSEtJE
    fetch(API_CALL)
       .then(
          function (response) {
@@ -36,9 +41,9 @@ function fetchStock(symbol) {
          function (data) {
             console.log(data);
 
-            for (var key in data['Time Series (5min)']) {
+            for (var key in data['Time Series (60min)']) {
                stockXValues.push(key);
-               stockYValues.push(data['Time Series (5min)'][key]['4. close']);
+               stockYValues.push(data['Time Series (60min)'][key]['4. close']);
             }
 
             currentPrice = stockYValues[0];
@@ -50,29 +55,36 @@ function fetchStock(symbol) {
             // calculate average price per share
             stockAverage = stockTotal / 100;
 
-            console.log("Last close price: $" + currentPrice);
-            console.log("Average: $" + stockAverage);
+            // debugging
+            console.log("Ticker: " + symbol);
+            console.log("Current: " + currentPrice);
+            // console.log("Total: " + stockTotal);
+            console.log("Average: " + stockAverage);
 
+            // decide whether current price is above or below average and what to do
             if (currentPrice < stockAverage) {
-               potentialProfit = currentPrice / stockAverage;
+               potentialProfit = (currentPrice / stockAverage).toFixed(2);
                document.getElementById("stockPriceBelow").innerHTML = "Current: $" + currentPrice;
                document.getElementById("stockPriceBelow").style.color = "red";
-               console.log("BUY for " + potentialProfit + "% potential profit");
+               // document.getElementById("stockRecommendation").innerHTML = "BUY for " + potentialProfit + "% potential profit";
+               console.log("BUY");
             }
-            else if (currentPrice > stockAverage) {
-               potentialProfit = stockAverage / currentPrice;
+            else if (stockAverage < currentPrice) {
+               potentialProfit = (stockAverage / currentPrice).toFixed(2);
                document.getElementById("stockPriceAbove").innerHTML = "Current: $" + currentPrice;
                document.getElementById("stockPriceAbove").style.color = "green";
-               console.log("SELL for " + potentialProfit + "% potential profit");
+               // document.getElementById("stockRecommendation").innerHTML = "SELL for " + potentialProfit + "% potential profit";
+               console.log("SELL");
             }
             else {
+               document.getElementById("stockRecommendation").innerHTML = "HOLD!";
                console.log("HOLD!");
             }
 
-            // had to move the price updater into here because the value couldn't be retrieved from other scopes
+            // update the stock name with user input
+            document.getElementById("tickerSymbol").innerHTML = symbol;
             document.getElementById("stockTime").innerHTML = "" + stockXValues[0];
             document.getElementById("stockAverage").innerHTML = "Average: $" + stockAverage;
-
          }
       )
 }
