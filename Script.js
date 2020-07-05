@@ -1,7 +1,8 @@
-// List of implementations to work on:
+// List of implementations to work on in descending priority:
 
-// TODO error handle searching for a ticker symbol that doesn't exist
+// TODO fix profit calculation
 // TODO enter key integration so the user doesn't need to press the "Analyze" button each time
+// TODO error handle searching for a ticker symbol that doesn't exist
 
 // Now back to the code!
 // --------------------------------------------------------------------------------------------------------
